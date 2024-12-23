@@ -39,7 +39,7 @@ public class FFMpegRunner {
             output += String.format("/%s_%s.avi", cam, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
             var command_args = String.format(cmd, runTime, ringURL, output).split(" ");
             ProcessBuilder processBuilder = new ProcessBuilder(command_args);
-            logger.trace("Execute command: " + processBuilder.command());
+            logger.trace("Execute command: {}", processBuilder.command());
             Process process = processBuilder.start();
 
             if (!process.waitFor(timeoutSeconds, TimeUnit.SECONDS)) {

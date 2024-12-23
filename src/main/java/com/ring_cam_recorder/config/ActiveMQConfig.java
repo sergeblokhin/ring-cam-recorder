@@ -23,7 +23,7 @@ public class ActiveMQConfig {
         var res = Arrays.stream(topic_config).filter(conf -> {
             return conf.cam.equals(cam);
         }).findFirst();
-        return res.isEmpty() ? null : res.get().url;
+        return res.map(topicConfig -> topicConfig.url).orElse(null);
 
     }
 }

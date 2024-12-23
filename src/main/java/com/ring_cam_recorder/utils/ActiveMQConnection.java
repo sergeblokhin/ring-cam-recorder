@@ -26,10 +26,10 @@ public class ActiveMQConnection{
 
     @Async
     public void run(String topic, String cam){
-        logger.info("start thread: " + Thread.currentThread().getId());
+        logger.info("start thread: {}", Thread.currentThread().getId());
         var factory = new ActiveMQConnectionFactory(config.getBrokerUrl());
         //Connection connection = null;
-        Session session = null;
+        Session session;
         try (var connection = factory.createConnection()){
 
             connection.start();
@@ -61,7 +61,7 @@ public class ActiveMQConnection{
         }
     }
     void runFFmpeg(String cam) throws IOException{
-        logger.info("run recording for cam " + cam);
+        logger.info("run recording for cam {}", cam);
         ffmpegRunner.runFFmpegCommand(cam, config.findURL(cam));
     }
 
