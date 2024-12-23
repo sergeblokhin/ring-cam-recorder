@@ -1,0 +1,30 @@
+  # any other properties
+app:
+  name: "ring-cam-recorder"
+#---
+spring:
+  name: "ring-cam-recorder"
+---
+# application.yaml
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+activemq:
+  broker-url: tcp://10.10.2.50:61616
+  topic_config:
+    - topic: "ring.695e84ba-380b-4c1e-aeb8-1e8439b677bc.camera.5c475e79ebb6.motion.state"
+      cam: "5c475e79ebb6"
+      url: "rtsp://10.10.2.50:8554/5c475e79ebb6_live"
+    - topic: "test_topic"
+      cam: "cam_test"
+      url: "./home/test.avi"
+recording:
+  timeout-seconds: 10
+  folder: ./home/data/video/cams/
+  cmd: ffmpeg
+  cmd_params: -i %s -c copy %s
+---
+spring:
+  profiles:
+      active: "dev"
