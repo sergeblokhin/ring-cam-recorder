@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Data
 @Component
-public class ActiveMQConnection{
+public class ActiveMQConnection {
     private static final Logger logger = LoggerFactory.getLogger(ActiveMQConnection.class);
     @Autowired
     private final ActiveMQConfig config;
@@ -25,44 +25,45 @@ public class ActiveMQConnection{
 
 
     @Async
-    public void run(String topic, String cam){
-        logger.info("start thread: {}", Thread.currentThread().getId());
-        var factory = new ActiveMQConnectionFactory(config.getBrokerUrl());
-        //Connection connection = null;
-        Session session;
-        try (var connection = factory.createConnection()){
+    public void run(String topic, String cam) {
+        logger.trace("start thread: {}", Thread.currentThread().getId());
 
-            connection.start();
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destinationTopic = session.createTopic(topic);
-
-            // Create a MessageConsumer from the Session to the Topic or Queue
-            MessageConsumer consumer = session.createConsumer(destinationTopic);
-            while(true) {
+        try (var consumer = createConsumer(topic)) {
+            while (true) {
                 var msg = consumer.receive();
-                if(msg != null){
-                    logger.info("Message received from topic %s in thread %d".formatted(topic,Thread.currentThread().getId()));
-                    var s = new String (msg.getBody(byte[].class));
-                    if(s.equals("ON")){
-                        logger.trace("ON");
-                        consumer.close(); // this is to avoid reading messages during video recording.
+                if (msg != null) {
+                    logger.info("Message received from topic %s in thread %d".formatted(topic, Thread.currentThread().getId()));
+                    var s = new String(msg.getBody(byte[].class));
+                    if (s.equals("ON")) {
+                        logger.trace("Motion is ON, start recording");
                         runFFmpeg(cam);
-                        consumer = session.createConsumer(destinationTopic);
+                        logger.trace("Stop recording");
                     }
-                }else{
+                } else {
                     logger.info("Bad message , exit listener");
                     break;
                 }
             }
-            consumer.close();
-            session.close();
-        }catch(Exception e){
-            logger.error("Error",e);
+        } catch (Exception e) {
+            logger.error("Error", e);
         }
+        logger.trace("stop thread: {}", Thread.currentThread().getId());
     }
-    void runFFmpeg(String cam) throws IOException{
+
+    void runFFmpeg(String cam) {
         logger.info("run recording for cam {}", cam);
         ffmpegRunner.runFFmpegCommand(cam, config.findURL(cam));
+    }
+
+    public MessageConsumer createConsumer(String topic) throws JMSException {
+        var factory = new ActiveMQConnectionFactory(config.getBrokerUrl());
+        var connection = factory.createConnection(); // is this leaking connection?
+        connection.start();
+        var session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Destination destinationTopic = session.createTopic(topic);
+
+        // Create a MessageConsumer from the Session to the Topic or Queue
+        return session.createConsumer(destinationTopic);
     }
 
 }

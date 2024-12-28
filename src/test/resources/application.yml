@@ -24,7 +24,7 @@ recording:
   folder: ./home/data/video/cams/
   cmd: ffmpeg -t %d -i %s -c copy %s
   purge-interval: 24 #cron style notation
-  retain: 1D #days
+  retain: 1 #days
 
 ---
 spring:

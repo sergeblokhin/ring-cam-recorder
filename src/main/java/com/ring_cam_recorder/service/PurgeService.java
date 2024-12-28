@@ -1,8 +1,8 @@
 package com.ring_cam_recorder.service;
 
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 
+@Data
 @Service
 @EnableScheduling
 public class PurgeService {
@@ -26,20 +27,6 @@ public class PurgeService {
 
     @Scheduled(fixedDelayString = "${recording.purge-interval}")
     public void purge() {
-        purge_files();
-    }
-
-    @Autowired
-    public PurgeService() {
-
-    }
-
-    public PurgeService(String rootDir, int days_retain) {
-        this.rootDir = rootDir;
-        this.days_retain = days_retain;
-    }
-
-    public void purge_files() {
         try (Stream<Path> paths = Files.walk(Paths.get(rootDir))) {
             paths.filter(Files::isReadable).filter(Files::isWritable).filter(Files::isRegularFile).forEach(
                     p -> {
