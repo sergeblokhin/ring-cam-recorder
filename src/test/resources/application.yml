@@ -22,8 +22,10 @@ activemq:
 recording:
   timeout-seconds: 10
   folder: ./home/data/video/cams/
-  cmd: ffmpeg
-  cmd_params: -i %s -c copy %s
+  cmd: ffmpeg -t %d -i %s -c copy %s
+  purge-interval: 24 #cron style notation
+  retain: 1D #days
+
 ---
 spring:
   profiles:

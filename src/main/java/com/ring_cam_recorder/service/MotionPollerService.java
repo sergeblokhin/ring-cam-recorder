@@ -19,7 +19,7 @@ import java.util.Map;
 public class MotionPollerService {
     private static final Logger logger = LoggerFactory.getLogger(MotionPollerService.class);
 
-    private final Map<String,String> camConfig = new HashMap<>();
+    private final Map<String, String> camConfig = new HashMap<>();
     @Autowired
     private AsyncConfig aconfig;
     @Autowired
@@ -33,7 +33,7 @@ public class MotionPollerService {
     public void run() {
         try {
 
-            for( var topic_conf : this.mqConfig.getTopic_config()){
+            for (var topic_conf : this.mqConfig.getTopic_config()) {
 
                 mqConnection.run(topic_conf.getTopic(), topic_conf.getCam());
 

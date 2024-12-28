@@ -30,6 +30,8 @@ recording:
   run-time: 300 # 50 min recording time
   folder: ./home/data/video/cams/
   cmd: ffmpeg -t %d -i %s -c copy %s
+  purge-interval: 24 #cron style notation
+  retain:  30 #days
 ---
 spring:
   config:
