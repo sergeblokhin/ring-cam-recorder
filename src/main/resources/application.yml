@@ -11,8 +11,6 @@ spring:
     activate:
       on-profile: "dev"
   jms:
-    template:
-      receive-timeout=0:
     pub-sub-domain: true
   activemq:
     broker-url: tcp://10.10.2.50:61616
@@ -38,12 +36,14 @@ recording:
   folder: ./home/data/video/cams/
   cmd: ffmpeg -t %d -i %s -c copy %s
   purge-interval: 24 #cron style notation
-  retain:  30 #days
+  retain:  10 #days
 ---
 spring:
   config:
     activate:
       on-profile: prod
+  jms:
+    pub-sub-domain: true
 activemq:
   broker-url: tcp://10.10.2.50:61616
   topic_config:
@@ -64,6 +64,8 @@ recording:
   run-time: 300 # 5 min recording time
   folder: /home/data/video/cams/
   cmd: ffmpeg -t %d -i %s -c copy %s
+  purge-interval: 24h #in 24 hours
+  retain: 10 #days
 
 ---
 spring:
