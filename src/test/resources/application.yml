@@ -10,19 +10,23 @@ spring:
   config:
     activate:
       on-profile: "dev"
-activemq:
-  broker-url: tcp://10.10.2.50:61616
-  topic_config:
-    - topic: "ring.695e84ba-380b-4c1e-aeb8-1e8439b677bc.camera.5c475e79ebb6.motion.state"
-      cam: "5c475e79ebb6"
-      url: "rtsp://10.10.2.50:8554/5c475e79ebb6_live"
-    - topic: "test_topic"
-      cam: "cam_test"
-      url: "./home/test.avi"
+  activemq:
+    broker-url: tcp://10.10.2.50:61616
+    topic_config:
+      - topic: "ring.695e84ba-380b-4c1e-aeb8-1e8439b677bc.camera.5c475e79ebb6.motion.state"
+        cam: "5c475e79ebb6"
+        url: "rtsp://10.10.2.50:8554/5c475e79ebb6_live"
+      - topic: "ring/695e84ba-380b-4c1e-aeb8-1e8439b677bc/camera/5c475e79ebb6/motion/state"
+        cam: "5c475e79ebb6"
+        url: "rtsp://10.10.2.50:8554/5c475e79ebb6_live"
+      - topic: "test_topic"
+        cam: "cam_test"
+        url: "./home/test.avi"
 recording:
-  timeout-seconds: 10
+  timeout-seconds: 20
+  run-time: 10 # 5 min recording time
   folder: ./home/data/video/cams/
-  cmd: ffmpeg -t %d -i %s -c copy %s
+  cmd: ffmpeg -hide_banner -loglevel panic -t %d -i %s -c copy %s
   purge-interval: 24 #cron style notation
   retain: 1 #days
 

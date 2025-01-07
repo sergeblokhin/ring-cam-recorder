@@ -1,7 +1,6 @@
 package com.ring_cam_recorder.service;
 
 import com.ring_cam_recorder.config.ActiveMQConfig;
-import com.ring_cam_recorder.utils.ActiveMQConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class MotionPollerService {
     private ActiveMQConfig mqConfig;
 
     @Autowired
-    private ActiveMQConnection mqConnection;
+    private RingCamMessageListener listener;
 
 
     @EventListener(ApplicationReadyEvent.class)
@@ -27,7 +26,7 @@ public class MotionPollerService {
         try {
 
             for (var topic_conf : this.mqConfig.getTopic_config()) {
-                mqConnection.run(topic_conf.getTopic(), topic_conf.getCam());
+                listener.startListening(topic_conf.getTopic());
             }
         } catch (Exception e) {
             logger.error("Error polling topic", e);

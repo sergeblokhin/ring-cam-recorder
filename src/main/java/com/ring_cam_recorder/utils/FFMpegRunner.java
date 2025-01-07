@@ -1,5 +1,6 @@
 package com.ring_cam_recorder.utils;
 
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
+@Data
 @Component
 public class FFMpegRunner {
     private static final Logger logger = LoggerFactory.getLogger(FFMpegRunner.class);
@@ -26,8 +28,7 @@ public class FFMpegRunner {
     private String cmd;
     @Value("${recording.run-time}")
     private int runTime;
-    
-    
+
 
     public boolean runFFmpegCommand(String cam, String ringURL) {
         try {
@@ -43,6 +44,7 @@ public class FFMpegRunner {
             Process process = processBuilder.start();
 
             if (!process.waitFor(timeoutSeconds, TimeUnit.SECONDS)) {
+                printStdError(process);
                 process.destroyForcibly();
                 logger.error("FFmpeg command timed out after {} seconds", timeoutSeconds);
                 return false;
@@ -53,18 +55,23 @@ public class FFMpegRunner {
                 logger.info("FFmpeg command executed successfully");
                 return true;
             } else {
-                try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-                    String errorLine;
-                    logger.error("FFmpeg command failed with exit code {}", exitCode);
-                    while ((errorLine = errorReader.readLine()) != null) {
-                        logger.error(errorLine);
-                    }
-                }
+                printStdError(process);
                 return false;
             }
         } catch (Exception e) {
             logger.error("Error executing FFmpeg command", e);
             return false;
+        }
+    }
+
+    private void printStdError(Process proc) {
+        try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(proc.getErrorStream()))) {
+            String errorLine;
+            while ((errorLine = errorReader.readLine()) != null) {
+                logger.error(errorLine);
+            }
+        } catch (Exception e) {
+            logger.error("Error reading from process stderror {}", e.getMessage(), e);
         }
     }
 }

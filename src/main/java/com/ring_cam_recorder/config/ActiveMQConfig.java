@@ -8,10 +8,11 @@ import java.util.Arrays;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "activemq")
+@ConfigurationProperties(prefix = "spring.activemq")
 public class ActiveMQConfig {
     private String brokerUrl;
     private TopicConfig[] topic_config;
+
     @Data
     public static class TopicConfig {
         String topic;
@@ -26,6 +27,13 @@ public class ActiveMQConfig {
         return res.map(topicConfig -> topicConfig.url).orElse(null);
 
     }
+    public TopicConfig findByTopic(String topic){
+        var res = Arrays.stream(topic_config).filter(conf -> {
+            return conf.topic.equals(topic);
+        }).findFirst();
+        return res.orElse(null);
+    }
+
 }
 
 

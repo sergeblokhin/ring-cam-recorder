@@ -33,6 +33,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-activemq"){
 		exclude(module = "spring-boot-starter-logging")
 	}
+	//implementation("org.apache.activemq:activemq-broker")
 	// https://mvnrepository.com/artifact/org.apache.activemq/activemq-client
 	//implementation("org.apache.activemq:activemq-client:6.1.4")
 	//implementation("org.springframework.boot:spring-boot-starter-logging")
