@@ -15,9 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         logger.trace("Application start");
-        var context = SpringApplication.run(Main.class, args);
-        logger.trace("Application: {}} stop", context.getApplicationName());
-
+        SpringApplication.run(Main.class, args);
     }
 
 }
