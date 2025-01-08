@@ -4,14 +4,21 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%t][%c] %m%n" />
         </Console>
-        <File name="MAIN_LOG" fileName="logs/app.log">
+        <RollingFile name="FILE"
+                     fileName="logs/app.log"
+                     filePattern="app.%d{yyyy-MM-dd}.%i.log">
             <PatternLayout pattern="%d [%t] %p %c - %m%n"/>
-        </File>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root >
             <AppenderRef ref="Console" />
-            <AppenderRef ref="MAIN_LOG" />
+            <AppenderRef ref="FILE" />
         </Root>
         <Logger name="com.ring_cam_recorder" level="trace"/>
         <!-- <Logger name="org.springframework" level="debug"/> -->
