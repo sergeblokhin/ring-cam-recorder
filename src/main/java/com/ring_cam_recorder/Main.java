@@ -16,6 +16,7 @@ public class Main {
     public static void main(String[] args) {
         logger.trace("Application start");
         SpringApplication.run(Main.class, args);
+        logger.trace("Main function exit");
     }
 
 }
