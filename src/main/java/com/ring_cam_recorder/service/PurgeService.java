@@ -37,6 +37,8 @@ public class PurgeService {
                             if (dtCreated.isBefore(LocalDateTime.now().minusDays(days_retain))) {
                                 if (!file.delete()) {
                                     logger.error("Could not delete file {}", file.getName());
+                                }else{
+                                    logger.trace("Deleted {}", file.getName());
                                 }
                             }
 
