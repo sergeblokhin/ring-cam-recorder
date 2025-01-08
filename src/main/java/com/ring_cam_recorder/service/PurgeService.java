@@ -43,7 +43,7 @@ public class PurgeService {
                         }
                     });
         } catch (IOException e) {
-            logger.error("Error puring", e);
+            logger.error("Error purging", e);
             throw new RuntimeException(e);
         }
     }
