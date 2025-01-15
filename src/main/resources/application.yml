@@ -59,6 +59,10 @@ spring:
       - topic: "ring.695e84ba-380b-4c1e-aeb8-1e8439b677bc.camera.5c475e79ebb6.light.state"
         cam: "5c475e79ebb6"
         url: "rtsp://10.10.2.50:8554/5c475e79ebb6_live"
+      - topic: "ring.695e84ba-380b-4c1e-aeb8-1e8439b677bc.camera.5c475e78bcf6.motion.state"
+        cam: "5c475e78bcf6"
+        url: "rtsp://10.10.2.50:8554/5c475e78bcf6_live"
+
 recording:
   timeout-seconds: 3600 # 1 hour before to force exit
   run-time: 300 # 5 min recording time

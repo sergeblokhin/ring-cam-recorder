@@ -36,9 +36,9 @@ public class PurgeService {
                                     DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
                             if (dtCreated.isBefore(LocalDateTime.now().minusDays(days_retain))) {
                                 if (!file.delete()) {
-                                    logger.error("Could not delete file {}", file.getName());
+                                    logger.error("Could not delete file {}", file.getAbsoluteFile());
                                 }else{
-                                    logger.trace("Deleted {}", file.getName());
+                                    logger.trace("Deleted {}", file.getAbsoluteFile());
                                 }
                             }
 

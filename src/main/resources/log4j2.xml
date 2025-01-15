@@ -6,11 +6,11 @@
         </Console>
         <RollingFile name="FILE"
                      fileName="logs/app.log"
-                     filePattern="app.%d{yyyy-MM-dd}.%i.log">
+                     filePattern="logs/app.%d{yyyy-MM-dd}.%i.log">
             <PatternLayout pattern="%d [%t] %p %c - %m%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy FileSize="10 MB"/>
                 <TimeBasedTriggeringPolicy/>
             </Policies>
         </RollingFile>
